@@ -1,0 +1,32 @@
+{
+  "name": "demo-app",
+  "version": "1.0.0",
+  "description": "for learning MERN Full Stack Developement",
+  "main": "server.js",
+  "scripts": {
+    "frontend-install": "npm install --prefix frontend",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "frontend": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akashdeep703/demo-app.git"
+  },
+  "author": "Akashdeep",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akashdeep703/demo-app/issues"
+  },
+  "homepage": "https://github.com/akashdeep703/demo-app#readme",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "concurrently": "^7.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
