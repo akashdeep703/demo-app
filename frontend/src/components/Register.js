@@ -159,7 +159,7 @@ const Register = (props) => {
                             <label> Have an account ?</label>&nbsp;&nbsp;<a className='anchor' href='/login' >Login</a>
                         </div>
                         <div align="left">
-                            <Button variant="primary" type="submit" onClick={handleSubmit}>
+                            <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>
                                 Submit
                             </Button>
                         </div>

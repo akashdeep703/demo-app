@@ -95,7 +95,7 @@ const Login = (props) => {
                             </div>
                         </Form.Group>
                         <div align="left">
-                            <Button variant="primary" type="submit" onClick={handleSubmit}>
+                            <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>
                                 Submit
                             </Button>
                         </div>
