@@ -2,10 +2,14 @@ const express = require('express');
 const res = require('express/lib/response');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const config = require('config');
+const jwt = require('jsonwebtoken');
+
 
 
 // User Model
 const User = require('../../models/Users');
+const req = require('express/lib/request');
 
 // @routes GET api/users
 router.get('/', (req, res) => {
@@ -34,8 +38,7 @@ router.post('/', (req, res) => {
                 user_type,
                 password
             });
-            newUser.save().then(users => res.json(users));
-
+            // newUser.save().then(users => res.json(users));
             //create salt and hash
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err , hash) => {
@@ -43,14 +46,24 @@ router.post('/', (req, res) => {
                     newUser.password = hash;
                     newUser.save().
                     then(user => {
-                        res.json({
-                            user:{
-                                id: user.id,
-                                name: user.name,
-                                email: user.email,
-                                user_type : user.user_type
+                        jwt.sign(
+                
+                            { id: user.id},
+                            config.get('jwtSecret'),
+                            { expiresIn : 3600},
+                            (err, token) => {
+                                if(err) throw err;
+                                res.json({
+                                    token,
+                                    user:{
+                                        id: user.id,
+                                        name: user.name,
+                                        email: user.email,
+                                        user_type : user.user_type
+                                    }
+                                });
                             }
-                        });
+                        )                       
                     });
                 });
             });
