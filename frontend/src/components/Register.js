@@ -5,7 +5,9 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge'
 import React, { useState } from "react";
-const Register = (props) => {
+import Popup from 'react-popup';
+import axios from 'axios';
+export const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [user_type, setUserType] = useState('');
@@ -17,6 +19,7 @@ const Register = (props) => {
     const [errorusertype, setErrorUserType] = useState(false);
     const [errorpass, setErrorPass] = useState(false);
     const [errorcnfpass, setErrorCnfPass] = useState(false);
+    const [errorres, setErrorRes] = useState(false);
 
     const handleName = (e) => {
         let item = e.target.value;
@@ -101,8 +104,29 @@ const Register = (props) => {
             setErrorUserType(false);
             setErrorPass(false);
             setErrorCnfPass(false);
-            setSubmitted(true);
-            alert('all good');
+            // Headers
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            // Request body 
+            const body = JSON.stringify({ name, email, user_type, password });
+
+            axios.post('/api/users', body, config)
+                .then(res => {
+                    console.log("🚀 ~ file: Register.js ~ line 114 ~ handleSubmit ~ res", res)
+                    if (res.data.msg) {
+                        Popup.alert('I am alert, nice to meet you');
+                        setErrorRes(res.data.msg)
+                    console.log("🚀 ~ file: Register.js ~ line 120 ~ handleSubmit ~ res.data.msg", res.data.msg)
+                    } else {
+                        setSubmitted(true);
+                    }
+                })
+                .catch(err => {
+                    console.log("🚀 ~ file: Register.js ~ line 117 ~ handleSubmit ~ err", err)
+                });
         }
     };
     return (
@@ -111,7 +135,9 @@ const Register = (props) => {
                 <Col></Col>
                 <Col>
                     <h1 align="center">
-                        <Badge bg="secondary">Sign up</Badge>
+                        <Badge bg="secondary">Sign up</Badge><br/>
+                        {submitted ? <h6 align="left" className='text-danger'>Registered Successfully</h6> : ""}
+                        {errorres ? <h6 align="left" className='text-danger'>{errorres}</h6> : ""}
                     </h1>
                     <Form method='Post'>
                         <Form.Group className="mb-3">
@@ -172,5 +198,22 @@ const Register = (props) => {
 
     );
 }
+// const state = {
+//     name: '',
+//     email: '',
+//     password: '',
+//     msg: null
+// };
+// const mapStateToProps = (state) => {
 
+//     console.log(state, "statestate");
+//     // ({
+//     //     isAuthenticated: state.auth.isAuthenticated,
+//     //     error: state.error
+//     // })
+// }
 export default Register;
+
+// connect(
+//     mapStateToProps, { register }
+// )(Register);
