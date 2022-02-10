@@ -13,22 +13,23 @@ const req = require('express/lib/request');
 // @routes POST api/auth
 router.post('/', (req, res) => {
     const { email,password } = req.body;
+    console.log("🚀 ~ file: auth.js ~ line 16 ~ router.post ~ req.body;", req.body);
 
     //validation
     if (!email || !password) {
-        return res.status(400).json({ 200: 'Please enter all fields' });
+        return res.status(200).json({ msg: 'Please enter all fields' });
     }
 
     // check for existing User 
     User.findOne({ email })
         .then(user => {
-            if (!user) return res.status(400).json({ 200: 'User does not exists' });           
+            if (!user) return res.status(200).json({ msg: 'User does not exists' });           
             
             //validate password 
 
             bcrypt.compare(password, user.password).
             then(isMatch => {
-                if(!isMatch) return res.status(400).json({200 : 'Invalid Credentials'});
+                if(!isMatch) return res.status(200).json({msg : 'Invalid Credentials'});
 
                 jwt.sign(
                     { id: user.id},

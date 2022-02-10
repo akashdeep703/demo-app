@@ -2,10 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 // const bodyParser = require('body-parser');
 const config = require('config');   
+const session = require('express-session');
 const app = express();
 
 //BodyParser Middleware
-// app.use(bodyParser.json());
+// app.use(bodyParser.json()); 
 
 app.use(express.json());
 

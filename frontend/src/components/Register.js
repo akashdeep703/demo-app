@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge'
 import React, { useState } from "react";
-import Popup from 'react-popup';
 import axios from 'axios';
 export const Register = () => {
     const [name, setName] = useState('');
@@ -102,7 +101,7 @@ export const Register = () => {
             setErrorName(false);
             setErrorEmail(false);
             setErrorUserType(false);
-            setErrorPass(false);
+            setErrorPass(false); 
             setErrorCnfPass(false);
             // Headers
             const config = {
@@ -117,9 +116,8 @@ export const Register = () => {
                 .then(res => {
                     console.log("🚀 ~ file: Register.js ~ line 114 ~ handleSubmit ~ res", res)
                     if (res.data.msg) {
-                        Popup.alert('I am alert, nice to meet you');
                         setErrorRes(res.data.msg)
-                    console.log("🚀 ~ file: Register.js ~ line 120 ~ handleSubmit ~ res.data.msg", res.data.msg)
+                        console.log("🚀 ~ file: Register.js ~ line 120 ~ handleSubmit ~ res.data.msg", res.data.msg)
                     } else {
                         setSubmitted(true);
                     }
@@ -130,15 +128,16 @@ export const Register = () => {
         }
     };
     return (
+        <div className='App-header'>
         <Container>
             <Row>
                 <Col></Col>
                 <Col>
                     <h1 align="center">
-                        <Badge bg="secondary">Sign up</Badge><br/>
-                        {submitted ? <h6 align="left" className='text-danger'>Registered Successfully</h6> : ""}
-                        {errorres ? <h6 align="left" className='text-danger'>{errorres}</h6> : ""}
+                        <Badge bg="secondary">Sign up</Badge><br />
                     </h1>
+                    {submitted ? <h6 align="left" className='text-success'>Registered Successfully</h6> : ""}
+                    {errorres ? <h6 align="left" className='text-danger'>{errorres}</h6> : ""}
                     <Form method='Post'>
                         <Form.Group className="mb-3">
                             <div align="left">
@@ -182,7 +181,7 @@ export const Register = () => {
                             {errorcnfpass ? <div align="left" className='text-danger'>Please enter confirm password</div> : ""}
                         </Form.Group>
                         <div align="right">
-                            <label> Have an account ?</label>&nbsp;&nbsp;<a className='anchor' href='/login' >Login</a>
+                            <label>Have an account ?</label>&nbsp;&nbsp;<a className='anchor' href='/login' >Login</a>
                         </div>
                         <div align="left">
                             <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>
@@ -195,25 +194,7 @@ export const Register = () => {
 
             </Row>
         </Container>
-
+        </div>
     );
 }
-// const state = {
-//     name: '',
-//     email: '',
-//     password: '',
-//     msg: null
-// };
-// const mapStateToProps = (state) => {
-
-//     console.log(state, "statestate");
-//     // ({
-//     //     isAuthenticated: state.auth.isAuthenticated,
-//     //     error: state.error
-//     // })
-// }
 export default Register;
-
-// connect(
-//     mapStateToProps, { register }
-// )(Register);
