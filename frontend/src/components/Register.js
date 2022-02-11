@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge'
 import React, { useState } from "react";
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 export const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -19,7 +20,8 @@ export const Register = () => {
     const [errorpass, setErrorPass] = useState(false);
     const [errorcnfpass, setErrorCnfPass] = useState(false);
     const [errorres, setErrorRes] = useState(false);
-
+    const redirect = useHistory();   
+    localStorage.getItem('token') ? redirect.push("/dashboard")   : ''
     const handleName = (e) => {
         let item = e.target.value;
         if (item.length < 3) {

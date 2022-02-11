@@ -1,0 +1,24 @@
+.headerContainer {
+    /* display: flex;
+    justify-content: flex-end; */
+    background-color: #e7f1ff;
+    height: 56px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .mainContainer{
+    display: flex;
+    height: 93.9vh;
+
+  }
+
+  .sideBar{
+    background-color: aqua;
+  }
+
+.tableContent{
+  width: 100%;
+}

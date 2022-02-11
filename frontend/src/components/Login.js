@@ -15,6 +15,7 @@ const Login = (props) => {
     const [errorpass, setErrorPass] = useState(false);
     const [errorres, setErrorRes] = useState(false);
     const redirect = useHistory();
+    localStorage.getItem('token') ? redirect.push("/dashboard") : ''
     const handleEmail = (e) => {
         var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
         let item = e.target.value;
@@ -71,7 +72,9 @@ const Login = (props) => {
                         console.log("🚀 ~ file: Login.js ~ line 69 ~ handleSubmit ~ res.data.msg", res.data.msg)
                         setErrorRes(res.data.msg)
                     } else {
-                        console.log(res.data);
+                        console.log(res.data.user.name);
+                        localStorage.setItem("token", res.data.token);
+                        localStorage.setItem("user", res.data.user.name);
                         redirect.push("/dashboard");
                         setSubmitted(true);
                     }
@@ -112,18 +115,15 @@ const Login = (props) => {
                                 {errorpass ? <div align="left" className='text-danger'>please enter password</div> : ""}
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <div align="left">
-                                    <Form.Check type="checkbox" label="Remember me" />
-                                </div>
                                 <div align="right">
                                     <label> New user ?</label>&nbsp;&nbsp;<a className='anchor' href='/register' >Sign Up</a>
                                 </div>
+                                <div align="left">
+                                    <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>
+                                        Submit
+                                    </Button>
+                                </div>
                             </Form.Group>
-                            <div align="left">
-                                <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>
-                                    Submit
-                                </Button>
-                            </div>
                         </Form>
                     </Col>
                     <Col></Col>
