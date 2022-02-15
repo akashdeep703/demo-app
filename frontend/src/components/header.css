@@ -14,11 +14,55 @@
     height: 93.9vh;
 
   }
-
   .sideBar{
     background-color: aqua;
   }
-
-.tableContent{
-  width: 100%;
-}
+  .sideBarPanel{
+    background: #300a24;
+    color: #fff;
+    height: 100%;
+    width: 270px;
+    min-width: 270px;
+    text-align: left;
+    transition: width,left,right,0.3s;
+    position: relative;
+  }
+  .ButtonPanel{
+    position: relative;   
+    display: flex;
+    align-items: center;
+    padding: 8px 2px 8px 15px;
+    height: 45px;
+    cursor: pointer;
+    outline: none;
+    flex-direction:column;
+  } 
+  .ButtonStyle{
+    color: #ffffff;
+    background-color: #300a24;
+    border: 2px solid #300a24;
+    margin-top: 10px;
+    padding: 5px 25px 5px 5px;
+    font-weight: bold;
+  }
+  .ButtonStyle:hover{
+    color: #e7f1ff;
+    border: 2px solid#e7f1ff;
+    border-radius: 15.25rem;
+  }
+  .ButtonStyle-1{
+    color: #ffffff;
+    background-color: #300a24;
+    border: 2px solid #300a24;
+    margin-top: 30px;
+    padding: 5px 25px 5px 5px;
+    font-weight: bold;
+  }
+  .ButtonStyle-1:hover{
+    color: #e7f1ff;
+    border: 2px solid#e7f1ff;
+    border-radius: 15.25rem;
+  }
+  .tableContent{
+    width: 100%;
+  }

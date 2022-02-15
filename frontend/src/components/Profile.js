@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import './header.css';
-import { Table } from "react-bootstrap";
+import {  } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
 import Addlisting from "./AddListing";
-const Sidebar = () => {
+const Profile = () => {
     const [modalShow, setModalShow] = useState(false);
     const user = localStorage.getItem('user');
     const redirect = useHistory();
@@ -50,8 +49,8 @@ const Sidebar = () => {
                 <div className='sideBar'>
                     <div className="sideBarPanel">
                         <div className="ButtonPanel">
-                        <button className="ButtonStyle-1" onClick={() => handleDashboard()}>
-                        <i class="bi bi-card-heading"></i> &nbsp; Dashboard
+                            <button className="ButtonStyle-1" onClick={() => handleDashboard()}>
+                                <i class="bi bi-card-heading"></i> &nbsp; Dashboard
                             </button>
                             <button className="ButtonStyle" onClick={() => handleListing()}>
                                 <i className="bi bi-list"></i> &nbsp; Add Listing
@@ -68,47 +67,11 @@ const Sidebar = () => {
                     </div>
                 </div>
                 <div className='tableContent'>
-                    <Table striped bordered hover >
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Username</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                        </tbody>
-                    </Table>
-
+                   Profile Info here
                 </div>
             </div>
 
         </div>
     );
 };
-export default Sidebar;
+export default Profile;
