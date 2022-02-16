@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import {  } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
-import Addlisting from "./AddListing";
+import Addlisting from "./AddBooks";
+import usericon from '../images/user.png';
+import logo from '../images/logo.png'
 const Profile = () => {
     const [modalShow, setModalShow] = useState(false);
     const user = localStorage.getItem('user');
+    const email = localStorage.getItem('email');
+    const usertype = localStorage.getItem('usertype');
+
     const redirect = useHistory();
     const handleDashboard = () => {
         redirect.push("/dashboard");
@@ -18,31 +22,17 @@ const Profile = () => {
     const handlelogout = (e) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('email');
+        localStorage.removeItem('usertype');
         redirect.push("/");
     };
     return (
         <div>
             <div className='headerContainer'>
                 <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "13px" }}>
-
-                    <div style={{ marginLeft: "50px" }}>
-                        <h6>Welcome {user}</h6>
+                    <div style={{ marginLeft: "20px" }}>
+                        <h6><img src={logo} height="35px"></img> &nbsp;&nbsp;&nbsp;Welcome {user}</h6>
                     </div>
-                    <div>
-                        <input
-                            type="text"
-                            // onKeyDown={(e) => searchImages(e)}
-                            placeholder="Search For Listing"
-                            style={{
-                                width: "350px",
-                                borderRadius: "8px",
-                                borderColor: "black",
-                                fontWeight: "bold",
-                                justifyContent: 'end'
-                            }}
-                        />
-                    </div>
-
                 </div>
             </div>
             <div className='mainContainer'>
@@ -50,10 +40,10 @@ const Profile = () => {
                     <div className="sideBarPanel">
                         <div className="ButtonPanel">
                             <button className="ButtonStyle-1" onClick={() => handleDashboard()}>
-                                <i class="bi bi-card-heading"></i> &nbsp; Dashboard
+                                <i className="bi bi-card-heading"></i> &nbsp; Dashboard
                             </button>
                             <button className="ButtonStyle" onClick={() => handleListing()}>
-                                <i className="bi bi-list"></i> &nbsp; Add Listing
+                                <i className="bi bi-journal-code"></i> &nbsp; Add Books
                             </button>
                             <button className="ButtonStyle" onClick={() => handleProfile()}>
                                 <i className="bi bi-person-fill"></i> &nbsp; User Info
@@ -62,12 +52,29 @@ const Profile = () => {
                                 <i className="bi bi-box-arrow-in-right"></i> &nbsp; Log Out
                             </button>
                             <Addlisting show={modalShow}
-                            />
+                                onHide={() => setModalShow(false)} />
                         </div>
                     </div>
                 </div>
-                <div className='tableContent'>
-                   Profile Info here
+                <div className='profileMain'>
+                    <div className="profileContent">
+                        <div className="UserInfo">
+                            User Details
+                        </div>
+                        <div className="UserInfoContent">
+                            <img src={usericon} height="120px" /><br /><br />
+                            <h4>
+                                {user}
+                            </h4>
+                            <h4>
+                                {email}
+                            </h4>
+                            <h4>
+                                {usertype == '1' ? 'Basic' : 'Premium'}
+                            </h4>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 

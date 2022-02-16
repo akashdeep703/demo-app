@@ -75,6 +75,8 @@ const Login = (props) => {
                         console.log(res.data.user.name);
                         localStorage.setItem("token", res.data.token);
                         localStorage.setItem("user", res.data.user.name);
+                        localStorage.setItem("email", res.data.user.email);
+                        localStorage.setItem("usertype", res.data.user.user_type);
                         redirect.push("/dashboard");
                         setSubmitted(true);
                     }

@@ -47,7 +47,7 @@
   }
   .ButtonStyle:hover{
     color: #e7f1ff;
-    border: 2px solid#e7f1ff;
+    border: 2px solid #e7f1ff;
     border-radius: 15.25rem;
   }
   .ButtonStyle-1{
@@ -60,9 +60,69 @@
   }
   .ButtonStyle-1:hover{
     color: #e7f1ff;
-    border: 2px solid#e7f1ff;
+    border: 2px solid #e7f1ff;
     border-radius: 15.25rem;
   }
   .tableContent{
-    width: 100%;
+    width: 100%;    
   }
+  .profileMain{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  .profileContent{
+    background-color: #dee2e673;    
+    color: #343a40;
+    height: 50%;
+    width: 660;
+    min-width: 660px;
+    text-align: center;
+    transition: width,center,right,0.3s;
+    position: relative;
+    margin-top: 185px;
+    border-radius: 5.25rem;
+
+  }
+  .UserInfo{
+    margin-top: 25px;
+    font-size:x-large;
+    font-weight: bold;
+  }
+  .UserInfoContent{
+    margin-top: 45px;
+    justify-content: space-evenly;
+  }
+  .modalButtonDel{
+    display: flex;
+    margin-bottom: 15px;
+    width: 100%;
+    justify-content: space-around;
+  }
+  .modalHead{
+   background-color: #e7f1ff;
+  }
+  .modalTitle{
+    padding-left: 135px;
+    }
+  .modalButton{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .edit_delete{
+    background: transparent;
+    font-family: Akkurat-regular;
+    font-size: 18px;
+    line-height: 16px;
+    color: #005293;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .2s ease; 
+  }
+  .bar {
+    margin: 0 5px;
+    color: #005293;
+}
+  
