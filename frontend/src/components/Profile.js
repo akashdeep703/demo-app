@@ -7,6 +7,7 @@ const Profile = () => {
     const [modalShow, setModalShow] = useState(false);
     const user = localStorage.getItem('user');
     const email = localStorage.getItem('email');
+    const phone = localStorage.getItem('phone');
     const usertype = localStorage.getItem('usertype');
 
     const redirect = useHistory();
@@ -68,6 +69,9 @@ const Profile = () => {
                             </h4>
                             <h4>
                                 {email}
+                            </h4>
+                            <h4>
+                                {phone}
                             </h4>
                             <h4>
                                 {usertype == '1' ? 'Basic' : 'Premium'}

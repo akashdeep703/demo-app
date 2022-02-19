@@ -19,10 +19,10 @@ router.get('/', (req, res) => {
 
 // @routes POST api/users
 router.post('/', (req, res) => {
-    const { name, email, user_type, password } = req.body;
+    const { name, email, phone, user_type, password } = req.body;
 
     //validation
-    if (!name || !email || !user_type || !password) {
+    if (!name || !email || !user_type || !phone || !password) {
         return res.status(200).json({ msg: 'Please enter all fields' });
     }
 
@@ -33,6 +33,7 @@ router.post('/', (req, res) => {
             const newUser = new User({
                 name,
                 email,
+                phone,
                 user_type,
                 password
             });
@@ -56,6 +57,7 @@ router.post('/', (req, res) => {
                                     user:{
                                         id: user.id,
                                         name: user.name,
+                                        phone: user.phone,
                                         email: user.email,
                                         user_type : user.user_type
                                     }
@@ -65,7 +67,6 @@ router.post('/', (req, res) => {
                     });
                 });
             });
-
         });
 });
 

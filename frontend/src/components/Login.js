@@ -1,9 +1,5 @@
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Badge from 'react-bootstrap/Badge'
+import {Row, Col, Form, Button, Badge} from 'react-bootstrap';
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
@@ -76,6 +72,7 @@ const Login = (props) => {
                         localStorage.setItem("token", res.data.token);
                         localStorage.setItem("user", res.data.user.name);
                         localStorage.setItem("email", res.data.user.email);
+                        localStorage.setItem("phone", res.data.user.phone);
                         localStorage.setItem("usertype", res.data.user.user_type);
                         redirect.push("/dashboard");
                         setSubmitted(true);

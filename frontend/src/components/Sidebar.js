@@ -25,6 +25,7 @@ const Sidebar = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('email');
+        localStorage.removeItem('phone');
         localStorage.removeItem('usertype');
         redirect.push("/");
     };
@@ -33,13 +34,13 @@ const Sidebar = () => {
             <div className='headerContainer'>
                 <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "13px" }}>
                     <div style={{ marginLeft: "20px" }}>
-                    <h6><img src={logo} height="35px"></img> &nbsp;&nbsp;&nbsp;Welcome {user}</h6>                      
+                        <h6><img src={logo} height="35px"></img> &nbsp;&nbsp;&nbsp;Welcome {user}</h6>
                     </div>
                     <div>
                         <input
                             type="text"
                             // onKeyDown={(e) => searchBooks(e)}
-                            placeholder="Search For Books"
+                            placeholder="Search by Book Name, Author name"
                             style={{
                                 width: "350px",
                                 borderRadius: "8px",
@@ -94,6 +95,7 @@ const Sidebar = () => {
                                 <th>Author Name</th>
                                 <th>Quantity</th>
                                 <th>Price (₹)</th>
+                                <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -104,6 +106,7 @@ const Sidebar = () => {
                                 <td>Otto</td>
                                 <td>@mdo</td>
                                 <td>1</td>
+                                <td>12-12-2022</td>
                                 <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
                                     <span className="bar">|</span>
                                     <a className="edit_delete" onClick={handleShow}>Delete</a></td>
@@ -114,6 +117,7 @@ const Sidebar = () => {
                                 <td>Thornton</td>
                                 <td>@fat</td>
                                 <td>1</td>
+                                <td>12-12-2022</td>
                                 <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
                                     <span className="bar">|</span>
                                     <a className="edit_delete" onClick={handleShow}>Delete</a></td>
@@ -124,6 +128,7 @@ const Sidebar = () => {
                                 <td>Otto</td>
                                 <td>@mdo</td>
                                 <td>1</td>
+                                <td>12-12-2022</td>
                                 <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
                                     <span className="bar">|</span>
                                     <a className="edit_delete" onClick={handleShow}>Delete</a></td>
@@ -134,13 +139,13 @@ const Sidebar = () => {
                                 <td>Thornton</td>
                                 <td>@fat</td>
                                 <td>1</td>
+                                <td>12-12-2022</td>
                                 <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
                                     <span className="bar">|</span>
                                     <a className="edit_delete" onClick={handleShow}>Delete</a></td>
                             </tr>
                         </tbody>
                     </Table>
-
                 </div>
             </div>
 
