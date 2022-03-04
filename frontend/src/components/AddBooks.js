@@ -1,7 +1,10 @@
 import { React, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-const AddBooks = (props) => {
+import { connect } from 'react-redux';
+import { AddBook, setModalShow } from "../actions/bookActions";
+import propTypes from "prop-types";
+export function AddBooks(props) {
     const [bookname, setBookName] = useState('');
     const [authorname, setAuthorName] = useState('');
     const [quantity, setQuanitity] = useState('');
@@ -21,6 +24,9 @@ const AddBooks = (props) => {
         }
         setBookName(item);
         setSubmitted(false);
+    };
+    const handleDashboard = () => {
+        redirect.push("/dashboard");
     };
     const handleAuthorName = (e) => {
         let item = e.target.value;
@@ -54,6 +60,7 @@ const AddBooks = (props) => {
     };
     // Handling the form submission
     const handleSubmit = (e) => {
+        let item = e.target.value;
         e.preventDefault();
         if (bookname.length < 3 && authorname.length < 3 && quantity.length === 0 && price.length === 0) {
             setErrorAuthorName(true);
@@ -78,28 +85,12 @@ const AddBooks = (props) => {
             setErrorAuthorName(false);
             setErrorQuantity(false);
             setErrorPrice(false);
-            // Headers
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
             // Request body 
-            const body = JSON.stringify({ bookname, authorname, quantity, price });
-
-            axios.post('/api/books/add', body, config)
-                .then(res => {
-                    console.log("🚀 ~ file: Register.js ~ line 114 ~ handleSubmit ~ res", res)
-                    if (res.data.msg) {
-                        setErrorRes(res.data.msg)
-                        console.log("🚀 ~ file: Register.js ~ line 120 ~ handleSubmit ~ res.data.msg", res.data.msg)
-                    } else {
-                        setSubmitted(true);
-                    }
-                })
-                .catch(err => {
-                    console.log("🚀 ~ file: Register.js ~ line 117 ~ handleSubmit ~ err", err)
-                });
+            const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
+            // add items
+            props.AddBook(body);
+            handleDashboard();
+            window.location.reload(false);
         }
     };
     return (
@@ -146,4 +137,11 @@ const AddBooks = (props) => {
         </Modal>
     );
 };
-export default AddBooks;
+AddBook.propTypes = {
+    AddBook: propTypes.func.isRequired,
+    book: propTypes.object.isRequired
+}
+const mapStateToProps = (state) => ({
+    book: state.book
+})
+export default connect(mapStateToProps, { AddBook })(AddBooks);

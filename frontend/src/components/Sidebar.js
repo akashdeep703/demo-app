@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './header.css';
 import logo from '../images/logo.png'
 import { Table } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
 import Addlisting from "./AddBooks";
 import { Modal, Button } from "react-bootstrap";
-const Sidebar = () => {
+import { connect } from 'react-redux';
+import { getBooks, deleteBook } from "../actions/bookActions";
+import propTypes from "prop-types";
+export function Sidebar(props) {
+    console.log("🚀 ~ file: Sidebar.js ~ line 12 ~ Sidebar ~ props", props)
+    useEffect(() => {
+        props.getBooks();
+    }, []);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -20,6 +27,11 @@ const Sidebar = () => {
     };
     const handleProfile = () => {
         redirect.push("/profile");
+    };
+    const onDeleteCilck = id => {
+        props.deleteBook(id);
+        setShow(false);
+        window.location.reload(false);
     };
     const handlelogout = (e) => {
         localStorage.removeItem('token');
@@ -72,22 +84,12 @@ const Sidebar = () => {
                             <Addlisting show={modalShow}
                                 onHide={() => setModalShow(false)}
                             />
-                            <Modal size="sm"
-                                aria-labelledby="contained-modal-title-vcenter"
-                                centered show={show} onHide={handleClose}>
-                                <Modal.Header className="modalHead">
-                                </Modal.Header>
-                                <Modal.Body>Are you sure to delete this Book ?</Modal.Body>
-                                <div className="modalButtonDel">
-                                    <Button variant="danger" onClick={handleClose}>Delete</Button>
-                                    <Button variant="secondary" onClick={handleClose}>Close</Button>
-                                </div>
-                            </Modal>
+
                         </div>
                     </div>
                 </div>
                 <div className='tableContent'>
-                    <Table striped bordered hover >
+                    <Table striped bordered hover>
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -100,50 +102,31 @@ const Sidebar = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>1</td>
-                                <td>12-12-2022</td>
-                                <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
-                                    <span className="bar">|</span>
-                                    <a className="edit_delete" onClick={handleShow}>Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>1</td>
-                                <td>12-12-2022</td>
-                                <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
-                                    <span className="bar">|</span>
-                                    <a className="edit_delete" onClick={handleShow}>Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>1</td>
-                                <td>12-12-2022</td>
-                                <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
-                                    <span className="bar">|</span>
-                                    <a className="edit_delete" onClick={handleShow}>Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>1</td>
-                                <td>12-12-2022</td>
-                                <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
-                                    <span className="bar">|</span>
-                                    <a className="edit_delete" onClick={handleShow}>Delete</a></td>
-                            </tr>
+                            {props.book.books.map(({ _id, bookname, authorname, quantity, price, created }) => (
+
+                                <tr key={_id}>
+                                    <td >1</td>
+                                    <td>{bookname}</td>
+                                    <td>{authorname}</td>
+                                    <td>{quantity}</td>
+                                    <td>{price}</td>
+                                    <td>{created.split('T')[0]}</td>
+                                    <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
+                                        <span className="bar">|</span>
+                                        <a className="edit_delete" onClick={handleShow}>Delete</a></td>
+                                    <Modal size="sm"
+                                        aria-labelledby="contained-modal-title-vcenter"
+                                        centered show={show} onHide={handleClose}>
+                                        <Modal.Header className="modalHead">
+                                        </Modal.Header>
+                                        <Modal.Body>Are you sure to delete this Book ?</Modal.Body>
+                                        <div className="modalButtonDel">
+                                            <Button variant="danger" onClick={() => onDeleteCilck({_id})}>Delete</Button>
+                                            <Button variant="secondary" onClick={handleClose}>Close</Button>
+                                        </div>
+                                    </Modal>
+                                </tr>
+                            ))}                           
                         </tbody>
                     </Table>
                 </div>
@@ -152,4 +135,11 @@ const Sidebar = () => {
         </div>
     );
 };
-export default Sidebar;
+getBooks.propTypes = {
+    getBooks: propTypes.func.isRequired,
+    book: propTypes.object.isRequired
+}
+const mapStateToProps = (state) => ({
+    book: state.book
+})
+export default connect(mapStateToProps, { getBooks, deleteBook })(Sidebar);

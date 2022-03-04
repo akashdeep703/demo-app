@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import Addlisting from "./AddBooks";
 import usericon from '../images/user.png';
-import logo from '../images/logo.png'
+import logo from '../images/logo.png';
 const Profile = () => {
     const [modalShow, setModalShow] = useState(false);
     const user = localStorage.getItem('user');

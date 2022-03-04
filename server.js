@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const config = require('config');   
 const session = require('express-session');
 const app = express();
-
+const user = require('./routes/api/users');
+const books = require('./routes/api/books');
+const auth = require('./routes/api/auth');
 //BodyParser Middleware
 // app.use(bodyParser.json()); 
 
@@ -22,8 +24,9 @@ mongoose
     .catch(err => console.log(err));
 
 // use and fetch routes
-app.use('/api/users', require('./routes/api/users'));
-app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', user);
+app.use('/api/books', books);
+app.use('/api/auth', auth);
 
 const port = process.env.PORT || 5000;
 
