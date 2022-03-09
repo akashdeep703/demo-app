@@ -1,10 +1,12 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
-import { AddBook, setModalShow } from "../actions/bookActions";
+import { addBook, getBook, updateBook } from "../actions/bookActions";
 import propTypes from "prop-types";
 export function AddBooks(props) {
+    const id = props.singlebook;
+    // console.log("🚀 ~ file: AddBooks.js ~ line 8 ~ AddBooks ~ props", id.books._id)
     const [bookname, setBookName] = useState('');
     const [authorname, setAuthorName] = useState('');
     const [quantity, setQuanitity] = useState('');
@@ -15,6 +17,21 @@ export function AddBooks(props) {
     const [errorquantity, setErrorQuantity] = useState(false);
     const [errorprice, setErrorPrice] = useState(false);
     const redirect = useHistory();
+    useEffect(() => {
+        if (props.singlebook.books && !bookname) {
+            setBookName(props.singlebook.books.bookname);
+        }
+        if (props.singlebook.books && !authorname) {
+            setAuthorName(props.singlebook.books.authorname);
+        }
+        if (props.singlebook.books && !quantity) {
+            setQuanitity(props.singlebook.books.quantity);
+        }
+        if (props.singlebook.books && !price) {
+            setPrice(props.singlebook.books.price);
+        }
+    });
+
     const handleBookName = (e) => {
         let item = e.target.value;
         if (item.length < 3 || item.length > 40) {
@@ -23,6 +40,7 @@ export function AddBooks(props) {
             setErrorBookName(false);
         }
         setBookName(item);
+        console.log("🚀 ~ file: AddBooks.js ~ line 34 ~ handleBookName ~ bookname", bookname)
         setSubmitted(false);
     };
     const handleDashboard = () => {
@@ -60,7 +78,6 @@ export function AddBooks(props) {
     };
     // Handling the form submission
     const handleSubmit = (e) => {
-        let item = e.target.value;
         e.preventDefault();
         if (bookname.length < 3 && authorname.length < 3 && quantity.length === 0 && price.length === 0) {
             setErrorAuthorName(true);
@@ -85,10 +102,17 @@ export function AddBooks(props) {
             setErrorAuthorName(false);
             setErrorQuantity(false);
             setErrorPrice(false);
-            // Request body 
-            const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
-            // add items
-            props.AddBook(body);
+            if (props.singlebook.books) {
+                // Request body 
+                const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
+                // update items
+                props.updateBook(id.books._id,body);
+            } else {
+                // Request body 
+                const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
+                // add items
+                props.addBook(body);
+            }
             handleDashboard();
             window.location.reload(false);
         }
@@ -105,27 +129,27 @@ export function AddBooks(props) {
                     <div align="left">
                         <Form.Label>Book Name*</Form.Label>
                     </div>
-                    <Form.Control type="text" placeholder="Enter Book Name" onChange={handleBookName} />
+                    <Form.Control type="text" placeholder="Enter Book Name" value={bookname} onChange={(e) => handleBookName(e)} />
                     {errorbookname ? <Form.Text align="left" className="text-danger">Please enter book name </Form.Text> : ""}
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <div align="left">
                         <Form.Label>Author Name*</Form.Label>
                     </div>
-                    <Form.Control type="text" placeholder="Enter Author Name" onChange={handleAuthorName} />
+                    <Form.Control type="text" placeholder="Enter Author Name" value={authorname} onChange={handleAuthorName} />
                     {errorauthorname ? <Form.Text align="left" className="text-danger">Please enter author name </Form.Text> : ""}
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <div align="left">
                         <Form.Label>Quantity*</Form.Label>
                     </div>
-                    <Form.Control type="number" placeholder="Add Quantity" onChange={handleQuantity} />
+                    <Form.Control type="number" placeholder="Add Quantity" value={quantity} onChange={handleQuantity} />
                     {errorquantity ? <Form.Text align="left" className="text-danger">Please enter valid quantity </Form.Text> : ""}
                 </Form.Group> <Form.Group className="mb-3">
                     <div align="left">
                         <Form.Label>Price (&#8377;)*</Form.Label>
                     </div>
-                    <Form.Control type="number" placeholder="Enter Book Price" onChange={handlePrice} />
+                    <Form.Control type="number" placeholder="Enter Book Price" value={price} onChange={handlePrice} />
                     {errorprice ? <Form.Text align="left" className="text-danger">Please enter valid price </Form.Text> : ""}
                 </Form.Group>
             </Form><br />
@@ -137,11 +161,12 @@ export function AddBooks(props) {
         </Modal>
     );
 };
-AddBook.propTypes = {
-    AddBook: propTypes.func.isRequired,
-    book: propTypes.object.isRequired
-}
+// addBook.propTypes = {
+//     addBook: propTypes.func.isRequired,
+//     book: propTypes.object.isRequired
+// }
 const mapStateToProps = (state) => ({
-    book: state.book
+    book: state.book,
+    singlebook: state.book.singlebook
 })
-export default connect(mapStateToProps, { AddBook })(AddBooks);
+export default connect(mapStateToProps, { addBook, getBook, updateBook })(AddBooks);

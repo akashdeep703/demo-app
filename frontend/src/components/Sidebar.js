@@ -6,10 +6,9 @@ import { useHistory } from 'react-router-dom';
 import Addlisting from "./AddBooks";
 import { Modal, Button } from "react-bootstrap";
 import { connect } from 'react-redux';
-import { getBooks, deleteBook } from "../actions/bookActions";
+import { getBooks, deleteBook, getBook } from "../actions/bookActions";
 import propTypes from "prop-types";
 export function Sidebar(props) {
-    console.log("🚀 ~ file: Sidebar.js ~ line 12 ~ Sidebar ~ props", props)
     useEffect(() => {
         props.getBooks();
     }, []);
@@ -24,6 +23,10 @@ export function Sidebar(props) {
     };
     const handleBooks = () => {
         setModalShow(true);
+    };
+    const updateBook = id => {
+        setModalShow(true);
+        props.getBook(id);
     };
     const handleProfile = () => {
         redirect.push("/profile");
@@ -81,7 +84,7 @@ export function Sidebar(props) {
                             <button className="ButtonStyle" onClick={handlelogout}>
                                 <i className="bi bi-box-arrow-in-right"></i> &nbsp; Log Out
                             </button>
-                            <Addlisting show={modalShow}
+                            <Addlisting  show={modalShow}
                                 onHide={() => setModalShow(false)}
                             />
 
@@ -111,7 +114,7 @@ export function Sidebar(props) {
                                     <td>{quantity}</td>
                                     <td>{price}</td>
                                     <td>{created.split('T')[0]}</td>
-                                    <td><a className="edit_delete" onClick={() => handleBooks()}>Edit</a>
+                                    <td><a className="edit_delete" onClick={() => updateBook({_id})}>Edit</a>
                                         <span className="bar">|</span>
                                         <a className="edit_delete" onClick={handleShow}>Delete</a></td>
                                     <Modal size="sm"
@@ -135,11 +138,15 @@ export function Sidebar(props) {
         </div>
     );
 };
-getBooks.propTypes = {
-    getBooks: propTypes.func.isRequired,
-    book: propTypes.object.isRequired
+// getBooks.propTypes = {
+//     getBooks: propTypes.func.isRequired,
+//     book: propTypes.object.isRequired,
+//     singleBook: propTypes.object.isRequired
+// }
+const mapStateToProps = (state) => {
+    return ({
+        book: state.book,
+        singlebook:state.book.singlebook
+    })
 }
-const mapStateToProps = (state) => ({
-    book: state.book
-})
-export default connect(mapStateToProps, { getBooks, deleteBook })(Sidebar);
+export default connect(mapStateToProps,  {getBooks,getBook,deleteBook})(Sidebar)
