@@ -5,7 +5,10 @@ import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard"
 import Profile from "./Profile";
+import store from '../store';
+import { loadUser } from '../actions/authActions';
 function App() {
+   store.dispatch(loadUser());
   return (<Router>
     <div className="App">
           <Switch>

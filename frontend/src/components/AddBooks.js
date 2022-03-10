@@ -113,8 +113,8 @@ export function AddBooks(props) {
                 // add items
                 props.addBook(body);
             }
-            handleDashboard();
-            window.location.reload(false);
+            // handleDashboard();
+            // window.location.reload(false);
         }
     };
     return (

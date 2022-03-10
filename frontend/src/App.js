@@ -5,7 +5,7 @@ import Home from './components/Home';
 function App() {
   return (
     <Provider store={store}>
-      <Home />
+      <Home  />
     </Provider>
   );
 }

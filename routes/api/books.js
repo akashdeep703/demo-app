@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth');
 
 // Books Model
 const Books = require('../../models/Books');
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
         .then(books => res.json(books));
 });
 // @routes POST api/books
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
     const { bookname, authorname, quantity, price } = req.body;
     console.log("🚀 ~ file: books.js ~ line 16 ~ router.post ~ req.body", req.body)
     //validation
@@ -32,7 +33,7 @@ router.get('/:id', (req, res) => {
         .catch(err => res.status(404).json({ success: false }));
 });
 // @routes POST api/books
-router.post('/:id', (req, res) => {
+router.post('/:id', auth, (req, res) => {
     Books.findById(req.params.id)
         .then(books => {
             const { bookname, authorname, quantity, price } = req.body;
@@ -49,7 +50,7 @@ router.post('/:id', (req, res) => {
 });
 
 // @routes DELETE api/books
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth, (req, res) => {
     Books.findById(req.params.id)
         .then(books => books.remove().then(() => res.json({ success: true })))
         .catch(err => res.status(404).json({ success: false }));

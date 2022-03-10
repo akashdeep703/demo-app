@@ -34,7 +34,7 @@ export function Sidebar(props) {
     const onDeleteCilck = id => {
         props.deleteBook(id);
         setShow(false);
-        window.location.reload(false);
+        // window.location.reload(false);
     };
     const handlelogout = (e) => {
         localStorage.removeItem('token');
