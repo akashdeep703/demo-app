@@ -18,24 +18,34 @@ export default function (state = initialState, action) {
         case USER_LOADED:
             return {
                 ...state,
-                isAuthenticated:true,
+                isAuthenticated: true,
                 isLoading: false,
-                user:action.payload
+                user: action.payload
             };
         case LOGIN_SUCCESS:
         case REGISTER_SUCCESS:
-            return{
+            localStorage.setItem('token', action.payload.token)
+            localStorage.setItem('user', action.payload.user.name)
+            localStorage.setItem('email', action.payload.user.email)
+            localStorage.setItem('phone', action.payload.user.phone)
+            localStorage.setItem('user_type', action.payload.user.user_type)
+
+            return {
                 ...state,
                 ...action.payload,
-                isAuthenticated,
-                isLoading 
+                isAuthenticated: true,
+                isLoading: false
             };
         case AUTH_ERROR:
         case LOGIN_FAIL:
         case LOGOUT_SUCCESS:
         case REGISTER_FAIL:
             localStorage.removeItem('token');
-            return{
+            localStorage.removeItem('user');
+            localStorage.removeItem('email');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('user_type');
+            return {
                 ...state,
                 token: null,
                 user: null,

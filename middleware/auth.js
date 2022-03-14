@@ -10,9 +10,9 @@ function auth(req, res, next) {
         const decoded = jwt.verify(token, config.get('jwtSecret'));
         // Add user from payload 
         req.user = decoded;
-        next(); 
+        next();
     } catch (error) {
-        res.status(400).json({msg : "Token is Invalid"});
+        res.status(400).json({ msg: "Token is Invalid" });
     }
 }
 module.exports = auth; 

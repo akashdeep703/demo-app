@@ -1,8 +1,10 @@
-import {Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import React, { useState } from "react";
-import axios from 'axios';
+import { register } from "../actions/authActions";
+import { clearErrors } from "../actions/errorActions"
+import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
-export const Register = () => {
+export const Register = (props) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -49,11 +51,11 @@ export const Register = () => {
         }
         setEmail(item);
         setSubmitted(false);
-    };     
+    };
     const handlePhone = (e) => {
         let item = e.target.value;
-        let pattern = new  RegExp(/^[0-9\b]+$/);
-        if (pattern.test(phone) === false ||  (phone.length < 3 || phone.length > 11)) {
+        let pattern = new RegExp(/^[0-9\b]+$/);
+        if (pattern.test(phone) === false || (phone.length < 3 || phone.length > 11)) {
             setErrorPhone(true);
         } else {
             setErrorPhone(false);
@@ -76,7 +78,7 @@ export const Register = () => {
         if (item.length < 3 || item.length > 20) {
             setErrorCnfPass(true);
         } else {
-            setErrorCnfPass(false);            
+            setErrorCnfPass(false);
         }
         setCnfPassword(item);
         setSubmitted(false);
@@ -85,7 +87,7 @@ export const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let pattern1 = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
-        let pattern2 = new  RegExp(/^[0-9\b]+$/);
+        let pattern2 = new RegExp(/^[0-9\b]+$/);
         if (name.length < 3 && pattern1.test(email) === false && pattern2.test(phone) === false && user_type.length === 0 && password.length < 3 && confpassword.length < 3) {
             setErrorName(true);
             setErrorEmail(true);
@@ -120,28 +122,15 @@ export const Register = () => {
             setErrorUserType(false);
             setErrorPass(false);
             setErrorCnfPass(false);
-            // Headers
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            // create user object 
+            const newUser = { name, email, phone, user_type, password };
+            // call register action
+            props.register(newUser);
+            if (props.error.id === 'REGISTER_FAIL') {
+                setErrorRes(props.error.msg.msg)
+            } else {
+                setSubmitted(true);
             }
-            // Request body 
-            const body = JSON.stringify({ name, email, phone, user_type, password });
-
-            axios.post('/api/users', body, config)
-                .then(res => {
-                    console.log("🚀 ~ file: Register.js ~ line 114 ~ handleSubmit ~ res", res)
-                    if (res.data.msg) {
-                        setErrorRes(res.data.msg)
-                        console.log("🚀 ~ file: Register.js ~ line 120 ~ handleSubmit ~ res.data.msg", res.data.msg)
-                    } else {
-                        setSubmitted(true);
-                    }
-                })
-                .catch(err => {
-                    console.log("🚀 ~ file: Register.js ~ line 117 ~ handleSubmit ~ err", err)
-                });
         }
     };
     return (
@@ -176,7 +165,7 @@ export const Register = () => {
                                 <div align="left">
                                     <Form.Label>Phone</Form.Label>
                                 </div>
-                                <Form.Control type="number"  placeholder="Enter phone number" onChange={handlePhone} />
+                                <Form.Control type="number" placeholder="Enter phone number" onChange={handlePhone} />
                                 {errorphone ? <div align="left" className='text-danger'>Please enter valid phone</div> : ""}
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -221,4 +210,10 @@ export const Register = () => {
         </div>
     );
 }
-export default Register;
+const mapStateToProps = (state) => {
+    return ({
+        isAuthenticated: state.auth.isAuthenticated,
+        error: state.error
+    })
+}
+export default connect(mapStateToProps, { register, clearErrors })(Register)

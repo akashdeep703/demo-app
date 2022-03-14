@@ -6,13 +6,14 @@ import { useHistory } from 'react-router-dom';
 import Addlisting from "./AddBooks";
 import { Modal, Button } from "react-bootstrap";
 import { connect } from 'react-redux';
-import { getBooks, deleteBook, getBook } from "../actions/bookActions";
-import propTypes from "prop-types";
+import { logout } from "../actions/authActions";
+import { getbooks, deletebook, getbook } from "../actions/bookActions";
 export function Sidebar(props) {
     useEffect(() => {
-        props.getBooks();
+        props.getbooks();
     }, []);
     const [show, setShow] = useState(false);
+    var count = 0;
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [modalShow, setModalShow] = useState(false);
@@ -25,23 +26,19 @@ export function Sidebar(props) {
         setModalShow(true);
     };
     const updateBook = id => {
+        props.getbook(id);
         setModalShow(true);
-        props.getBook(id);
     };
     const handleProfile = () => {
         redirect.push("/profile");
     };
-    const onDeleteCilck = id => {
-        props.deleteBook(id);
+    const onDeleteCilck = async (id) => {
+        await props.deletebook(id);
         setShow(false);
-        // window.location.reload(false);
+        props.getbooks();
     };
     const handlelogout = (e) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('email');
-        localStorage.removeItem('phone');
-        localStorage.removeItem('usertype');
+        props.logout();
         redirect.push("/");
     };
     return (
@@ -84,7 +81,7 @@ export function Sidebar(props) {
                             <button className="ButtonStyle" onClick={handlelogout}>
                                 <i className="bi bi-box-arrow-in-right"></i> &nbsp; Log Out
                             </button>
-                            <Addlisting  show={modalShow}
+                            <Addlisting show={modalShow}
                                 onHide={() => setModalShow(false)}
                             />
 
@@ -104,17 +101,16 @@ export function Sidebar(props) {
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {props.isAuthenticated && props.book.books.length != 0 ? <tbody>
                             {props.book.books.map(({ _id, bookname, authorname, quantity, price, created }) => (
-
                                 <tr key={_id}>
-                                    <td >1</td>
+                                    <td>{count = count + 1}</td>
                                     <td>{bookname}</td>
                                     <td>{authorname}</td>
                                     <td>{quantity}</td>
                                     <td>{price}</td>
                                     <td>{created.split('T')[0]}</td>
-                                    <td><a className="edit_delete" onClick={() => updateBook({_id})}>Edit</a>
+                                    <td><a className="edit_delete" onClick={() => updateBook({ _id })}>Edit</a>
                                         <span className="bar">|</span>
                                         <a className="edit_delete" onClick={handleShow}>Delete</a></td>
                                     <Modal size="sm"
@@ -124,13 +120,14 @@ export function Sidebar(props) {
                                         </Modal.Header>
                                         <Modal.Body>Are you sure to delete this Book ?</Modal.Body>
                                         <div className="modalButtonDel">
-                                            <Button variant="danger" onClick={() => onDeleteCilck({_id})}>Delete</Button>
+                                            <Button variant="danger" onClick={() => onDeleteCilck({ _id })}>Delete</Button>
                                             <Button variant="secondary" onClick={handleClose}>Close</Button>
                                         </div>
                                     </Modal>
                                 </tr>
-                            ))}                           
-                        </tbody>
+                            ))}
+                        </tbody> : <tbody><tr>
+                            <td colSpan={7}>No Records</td></tr></tbody>}
                     </Table>
                 </div>
             </div>
@@ -138,15 +135,11 @@ export function Sidebar(props) {
         </div>
     );
 };
-// getBooks.propTypes = {
-//     getBooks: propTypes.func.isRequired,
-//     book: propTypes.object.isRequired,
-//     singleBook: propTypes.object.isRequired
-// }
 const mapStateToProps = (state) => {
     return ({
         book: state.book,
-        singlebook:state.book.singlebook
+        singlebook: state.book.singlebook,
+        isAuthenticated: state.auth.isAuthenticated
     })
 }
-export default connect(mapStateToProps,  {getBooks,getBook,deleteBook})(Sidebar)
+export default connect(mapStateToProps, { getbooks, getbook, deletebook, logout })(Sidebar)

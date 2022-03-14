@@ -29,7 +29,7 @@ router.post('/', auth, (req, res) => {
 // @routes Get api/books
 router.get('/:id', (req, res) => {
     Books.findById(req.params.id)
-        .then(books => res.json({books}))
+        .then(books => res.json({ books }))
         .catch(err => res.status(404).json({ success: false }));
 });
 // @routes POST api/books
@@ -40,8 +40,8 @@ router.post('/:id', auth, (req, res) => {
             //validation
             if (!bookname || !authorname || !quantity || !price) {
                 return res.status(200).json({ msg: 'Please enter all fields' });
-            }            
-            var newvalues = { $set: {bookname: bookname, authorname: authorname , quantity: quantity, price: price } };
+            }
+            var newvalues = { $set: { bookname: bookname, authorname: authorname, quantity: quantity, price: price } };
             books.updateOne(newvalues)
                 .then(() => res.json({ books }))
                 .catch(err => res.status(400).json('Error: ' + err));
@@ -52,7 +52,9 @@ router.post('/:id', auth, (req, res) => {
 // @routes DELETE api/books
 router.delete('/:id', auth, (req, res) => {
     Books.findById(req.params.id)
-        .then(books => books.remove().then(() => res.json({ success: true })))
-        .catch(err => res.status(404).json({ success: false }));
+        .then(books => books.remove()
+            .then(() => res.json({ success: true }))
+            .catch(err => res.status(404).json({ success: false }))
+        ).catch(err => res.status(404).json({ success: false }))
 });
 module.exports = router;

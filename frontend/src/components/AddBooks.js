@@ -2,11 +2,9 @@ import { React, useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
-import { addBook, getBook, updateBook } from "../actions/bookActions";
-import propTypes from "prop-types";
+import { addbook, getbook, getbooks, updatebook } from "../actions/bookActions";
 export function AddBooks(props) {
     const id = props.singlebook;
-    // console.log("🚀 ~ file: AddBooks.js ~ line 8 ~ AddBooks ~ props", id.books._id)
     const [bookname, setBookName] = useState('');
     const [authorname, setAuthorName] = useState('');
     const [quantity, setQuanitity] = useState('');
@@ -40,7 +38,6 @@ export function AddBooks(props) {
             setErrorBookName(false);
         }
         setBookName(item);
-        console.log("🚀 ~ file: AddBooks.js ~ line 34 ~ handleBookName ~ bookname", bookname)
         setSubmitted(false);
     };
     const handleDashboard = () => {
@@ -77,7 +74,7 @@ export function AddBooks(props) {
         setSubmitted(false);
     };
     // Handling the form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (bookname.length < 3 && authorname.length < 3 && quantity.length === 0 && price.length === 0) {
             setErrorAuthorName(true);
@@ -106,20 +103,23 @@ export function AddBooks(props) {
                 // Request body 
                 const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
                 // update items
-                props.updateBook(id.books._id,body);
+                await props.updatebook(id.books._id, body);
+                props.onHide(false);
+                props.getbooks();
             } else {
                 // Request body 
                 const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
                 // add items
-                props.addBook(body);
+                props.addbook(body);
+                props.onHide(false);
+                handleDashboard();
             }
-            // handleDashboard();
-            // window.location.reload(false);
+
         }
     };
     return (
         <Modal
-            {...props}
+            show={props.show} onHide={props.onHide}
             aria-labelledby="contained-modal-title-vcenter" centered>
             <Modal.Header closeButton className="modalHead">
                 <Modal.Title className="modalTitle">Add Books Details</Modal.Title>
@@ -161,12 +161,8 @@ export function AddBooks(props) {
         </Modal>
     );
 };
-// addBook.propTypes = {
-//     addBook: propTypes.func.isRequired,
-//     book: propTypes.object.isRequired
-// }
 const mapStateToProps = (state) => ({
     book: state.book,
     singlebook: state.book.singlebook
 })
-export default connect(mapStateToProps, { addBook, getBook, updateBook })(AddBooks);
+export default connect(mapStateToProps, { addbook, getbook, getbooks, updatebook })(AddBooks);

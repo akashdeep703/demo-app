@@ -1,9 +1,11 @@
 import Container from 'react-bootstrap/Container';
-import {Row, Col, Form, Button, Badge} from 'react-bootstrap';
+import { Row, Col, Form, Button, Badge } from 'react-bootstrap';
 import React, { useState } from "react";
+import { login } from "../actions/authActions";
+import { connect } from 'react-redux';
+import { clearErrors } from '../actions/errorActions';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
-const Login = (props) => {
+export const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submitted, setSubmitted] = useState(false);
@@ -59,29 +61,14 @@ const Login = (props) => {
                 }
             }
             // Request body 
-            const body = JSON.stringify({ email, password });
-
-            axios.post('/api/auth', body, config)
-                .then(res => {
-                    console.log("🚀 ~ file: Login.js ~ line 67 ~ handleSubmit ~ res", res)
-                    if (res.data.msg) {
-                        console.log("🚀 ~ file: Login.js ~ line 69 ~ handleSubmit ~ res.data.msg", res.data.msg)
-                        setErrorRes(res.data.msg)
-                    } else {
-                        console.log(res.data.user.name);
-                        localStorage.setItem("token", res.data.token);
-                        localStorage.setItem("user", res.data.user.name);
-                        localStorage.setItem("email", res.data.user.email);
-                        localStorage.setItem("phone", res.data.user.phone);
-                        localStorage.setItem("usertype", res.data.user.user_type);
-                        redirect.push("/dashboard");
-                        setSubmitted(true);
-                    }
-                })
-                .catch(err => {
-                    console.log("🚀 ~ file: Login.js ~ line 76 ~ handleSubmit ~ err", err)
-                });
-            setSubmitted(true);
+            const user = { email, password };
+            // login action 
+            props.login(user);
+            if (props.error.id === 'LOGIN_FAIL') {
+                setErrorRes(props.error.msg.msg)
+            } else {
+                setSubmitted(true);
+            }
         }
     };
     return (
@@ -133,4 +120,10 @@ const Login = (props) => {
     );
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+    return ({
+        isAuthenticated: state.auth.isAuthenticated,
+        error: state.error
+    })
+}
+export default connect(mapStateToProps, { login, clearErrors })(Login)

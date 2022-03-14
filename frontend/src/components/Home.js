@@ -7,20 +7,20 @@ import Dashboard from "./Dashboard"
 import Profile from "./Profile";
 import store from '../store';
 import { loadUser } from '../actions/authActions';
-function App() {
-   store.dispatch(loadUser());
+function Home() {
+  store.dispatch(loadUser());
   return (<Router>
     <div className="App">
-          <Switch>
-            <Route exact path='/' component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path='/dashboard' component={Dashboard} />
-            <Route path='/profile' component={Profile} />
-          </Switch>
+      <Switch>
+        <Route exact path='/' component={Login} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path='/dashboard' component={Dashboard} />
+        <Route path='/profile' component={Profile} />
+      </Switch>
     </div>
-    </Router>
+  </Router>
   );
 }
 
-export default App;
+export default Home;

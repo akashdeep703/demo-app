@@ -8,7 +8,6 @@ const auth = require('../../middleware/auth');
 
 // User Model
 const User = require('../../models/Users');
-const req = require('express/lib/request');
 
 // @routes POST api/auth
 router.post('/', (req, res) => {
@@ -17,19 +16,19 @@ router.post('/', (req, res) => {
 
     //validation
     if (!email || !password) {
-        return res.status(200).json({ msg: 'Please enter all fields' });
+        return res.status(400).json({ msg: 'Please enter all fields' });
     }
 
     // check for existing User 
     User.findOne({ email })
         .then(user => {
-            if (!user) return res.status(200).json({ msg: 'User does not exists' });           
+            if (!user) return res.status(400).json({ msg: 'User does not exists' });           
             
             //validate password 
 
             bcrypt.compare(password, user.password).
             then(isMatch => {
-                if(!isMatch) return res.status(200).json({msg : 'Invalid Credentials'});
+                if(!isMatch) return res.status(400).json({msg : 'Invalid Credentials'});
 
                 jwt.sign(
                     { id: user.id},
