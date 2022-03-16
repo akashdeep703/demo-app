@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 //Create Schema 
 
 const BooksSchema = new Schema({
+    user_id:{
+        type: String,
+        required : true
+    },
     bookname:{
         type: String,
         required: true

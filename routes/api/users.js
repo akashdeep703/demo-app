@@ -18,7 +18,6 @@ router.get('/', (req, res) => {
 // @routes POST api/users
 router.post('/', (req, res) => {
     const { name, email, phone, user_type, password } = req.body;
-    console.log("🚀 ~ file: users.js ~ line 21 ~ router.post ~ req.body", req.body)
 
     //validation
     if (!name || !email || !user_type || !phone || !password) {

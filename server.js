@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 // const bodyParser = require('body-parser');
-const config = require('config');   
+const config = require('config');
 const session = require('express-session');
 const app = express();
 const user = require('./routes/api/users');
@@ -14,7 +14,7 @@ app.use(express.json());
 
 // DB Config 
 // const  db = require('./config/keys').mongoURI;
-const  db = config.get('mongoURI');
+const db = config.get('mongoURI');
 // Connect to mongodb 
 mongoose
     .connect(db, {
@@ -26,6 +26,8 @@ mongoose
 // use and fetch routes
 app.use('/api/users', user);
 app.use('/api/books', books);
+app.use('/api/books/singlebook', books);
+app.use('/api/books/search', books);
 app.use('/api/auth', auth);
 
 const port = process.env.PORT || 5000;

@@ -7,10 +7,11 @@ import Addlisting from "./AddBooks";
 import { Modal, Button } from "react-bootstrap";
 import { connect } from 'react-redux';
 import { logout } from "../actions/authActions";
-import { getbooks, deletebook, getbook } from "../actions/bookActions";
+import { getbooks, searchbook, deletebook, getbook } from "../actions/bookActions";
 export function Sidebar(props) {
+    const user_id = localStorage.getItem('user_id');
     useEffect(() => {
-        props.getbooks();
+        props.getbooks(user_id);
     }, []);
     const [show, setShow] = useState(false);
     var count = 0;
@@ -23,11 +24,21 @@ export function Sidebar(props) {
         redirect.push("/dashboard");
     };
     const handleBooks = () => {
+        props.getbooks(user_id);
         setModalShow(true);
     };
     const updateBook = id => {
         props.getbook(id);
         setModalShow(true);
+    };
+    const searchBooks = (e) => {
+        console.log(e.target.value);
+        if (e.target.value) {
+            props.searchbook(e.target.value);
+        } else {
+            props.getbooks(user_id);
+        }
+        handleDashboard();
     };
     const handleProfile = () => {
         redirect.push("/profile");
@@ -35,7 +46,7 @@ export function Sidebar(props) {
     const onDeleteCilck = async (id) => {
         await props.deletebook(id);
         setShow(false);
-        props.getbooks();
+        props.getbooks(user_id);
     };
     const handlelogout = (e) => {
         props.logout();
@@ -51,7 +62,7 @@ export function Sidebar(props) {
                     <div>
                         <input
                             type="text"
-                            // onKeyDown={(e) => searchBooks(e)}
+                            onChange={(e) => searchBooks(e)}
                             placeholder="Search by Book Name, Author name"
                             style={{
                                 width: "350px",
@@ -142,4 +153,4 @@ const mapStateToProps = (state) => {
         isAuthenticated: state.auth.isAuthenticated
     })
 }
-export default connect(mapStateToProps, { getbooks, getbook, deletebook, logout })(Sidebar)
+export default connect(mapStateToProps, { getbooks, searchbook, getbook, deletebook, logout })(Sidebar)

@@ -12,7 +12,6 @@ const User = require('../../models/Users');
 // @routes POST api/auth
 router.post('/', (req, res) => {
     const { email,password } = req.body;
-    console.log("🚀 ~ file: auth.js ~ line 16 ~ router.post ~ req.body;", req.body);
 
     //validation
     if (!email || !password) {

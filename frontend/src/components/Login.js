@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { login } from "../actions/authActions";
 import { connect } from 'react-redux';
 import { clearErrors } from '../actions/errorActions';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 export const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -53,13 +53,7 @@ export const Login = (props) => {
             setSubmitted(false);
         } else {
             setErrorEmail(false);
-            setErrorPass(false);
-            // Headers
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
+            setErrorPass(false);           
             // Request body 
             const user = { email, password };
             // login action 
@@ -102,7 +96,7 @@ export const Login = (props) => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <div align="right">
-                                    <label> New user ?</label>&nbsp;&nbsp;<a className='anchor' href='/register' >Sign Up</a>
+                                    <label> New user ?</label>&nbsp;&nbsp;<Link className='anchor' to={'/register'} >Sign Up</Link>
                                 </div>
                                 <div align="left">
                                     <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>

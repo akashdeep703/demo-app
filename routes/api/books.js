@@ -6,19 +6,20 @@ const auth = require('../../middleware/auth');
 const Books = require('../../models/Books');
 
 // @routes GET api/Books
-router.get('/', (req, res) => {
-    Books.find()
+router.get('/:userid', (req, res) => {
+    var sort = { bookname: -1 };
+    Books.find({ user_id: req.params.userid }).sort(sort)
         .then(books => res.json(books));
 });
 // @routes POST api/books
 router.post('/', auth, (req, res) => {
-    const { bookname, authorname, quantity, price } = req.body;
-    console.log("🚀 ~ file: books.js ~ line 16 ~ router.post ~ req.body", req.body)
+    const { user_id, bookname, authorname, quantity, price } = req.body;
     //validation
-    if (!bookname || !authorname || !quantity || !price) {
-        return res.status(200).json({ msg: 'Please enter all fields' });
+    if (!user_id || !bookname || !authorname || !quantity || !price) {
+        return res.status(400).json({ msg: 'Please enter all fields' });
     }
     const newBook = new Books({
+        user_id,
         bookname,
         authorname,
         quantity,
@@ -27,10 +28,10 @@ router.post('/', auth, (req, res) => {
     newBook.save().then(books => res.json(books));
 });
 // @routes Get api/books
-router.get('/:id', (req, res) => {
+router.get('/singlebook/:id', (req, res) => {
     Books.findById(req.params.id)
         .then(books => res.json({ books }))
-        .catch(err => res.status(404).json({ success: false }));
+        .catch(err => res.status(400).json({ success: false }));
 });
 // @routes POST api/books
 router.post('/:id', auth, (req, res) => {
@@ -48,7 +49,18 @@ router.post('/:id', auth, (req, res) => {
         })
         .catch(err => res.status(400).json('Error: ' + err));
 });
-
+// @routes Search api/books
+router.get('/search/:key', (req, res) => {
+    Books.find(
+        {
+            "$or": [
+                { bookname: { $regex: new RegExp("^" + req.params.key.toLowerCase(), "i") } },
+                { authorname: { $regex: new RegExp("^" + req.params.key.toLowerCase(), "i") } }
+            ]
+        }
+    ).then(books => res.json(books))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 // @routes DELETE api/books
 router.delete('/:id', auth, (req, res) => {
     Books.findById(req.params.id)

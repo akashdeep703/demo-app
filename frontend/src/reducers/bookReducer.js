@@ -1,4 +1,4 @@
-import { GET_BOOKS, ADD_BOOKS, GET_BOOK, DELETE_BOOKS, UPDATE_BOOK, BOOKS_LOADING } from "../actions/types";
+import { GET_BOOKS, ADD_BOOKS, GET_BOOK, DELETE_BOOKS, UPDATE_BOOK, SEARCH_BOOK, BOOKS_LOADING } from "../actions/types";
 const initialState = {
     books: [],
     singlebook:[],
@@ -29,6 +29,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 books: state.books.filter(book => book._id !== action.payload),
+                loading: false
+            }
+        case SEARCH_BOOK:
+            return {
+                ...state,
+                books: action.payload,
                 loading: false
             }
         case DELETE_BOOKS:

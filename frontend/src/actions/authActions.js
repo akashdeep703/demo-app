@@ -60,6 +60,7 @@ export const login = ({ email, password }) => dispatch => {
             payload: res.data
         }))
         .catch(err => {
+        console.log("🚀 ~ file: authActions.js ~ line 64 ~ err", err)
             dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'))
             dispatch({
                 type: LOGIN_FAIL

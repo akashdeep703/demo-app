@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { register } from "../actions/authActions";
 import { clearErrors } from "../actions/errorActions"
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 export const Register = (props) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -84,7 +84,7 @@ export const Register = (props) => {
         setSubmitted(false);
     };
     // Handling the form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let pattern1 = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
         let pattern2 = new RegExp(/^[0-9\b]+$/);
@@ -125,7 +125,8 @@ export const Register = (props) => {
             // create user object 
             const newUser = { name, email, phone, user_type, password };
             // call register action
-            props.register(newUser);
+            await props.register(newUser);
+            console.log("🚀 ~ file: Register.js ~ line 129 ~ handleSubmit ~ props", props)
             if (props.error.id === 'REGISTER_FAIL') {
                 setErrorRes(props.error.msg.msg)
             } else {
@@ -194,7 +195,7 @@ export const Register = (props) => {
                                 {errorcnfpass ? <div align="left" className='text-danger'>Please enter confirm password</div> : ""}
                             </Form.Group>
                             <div align="right">
-                                <label>Have an account ?</label>&nbsp;&nbsp;<a className='anchor' href='/login' >Login</a>
+                                <label>Have an account ?</label>&nbsp;&nbsp;<Link className='anchor' to={'/login'} >Login</Link>
                             </div>
                             <div align="left">
                                 <Button variant="primary" type="submit" className='button' onClick={handleSubmit}>

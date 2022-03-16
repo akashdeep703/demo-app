@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
 import { addbook, getbook, getbooks, updatebook } from "../actions/bookActions";
 export function AddBooks(props) {
+    const user_id = localStorage.getItem('user_id');
     const id = props.singlebook;
     const [bookname, setBookName] = useState('');
     const [authorname, setAuthorName] = useState('');
@@ -29,7 +30,6 @@ export function AddBooks(props) {
             setPrice(props.singlebook.books.price);
         }
     });
-
     const handleBookName = (e) => {
         let item = e.target.value;
         if (item.length < 3 || item.length > 40) {
@@ -105,10 +105,10 @@ export function AddBooks(props) {
                 // update items
                 await props.updatebook(id.books._id, body);
                 props.onHide(false);
-                props.getbooks();
+                props.getbooks(user_id);
             } else {
                 // Request body 
-                const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
+                const body = { user_id: user_id, bookname: bookname, authorname: authorname, quantity: quantity, price: price };
                 // add items
                 props.addbook(body);
                 props.onHide(false);
