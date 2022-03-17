@@ -24,7 +24,9 @@ export function Sidebar(props) {
         redirect.push("/dashboard");
     };
     const handleBooks = () => {
+        const addbutton = 'addd';
         props.getbooks(user_id);
+        props.addbutton;
         setModalShow(true);
     };
     const updateBook = id => {

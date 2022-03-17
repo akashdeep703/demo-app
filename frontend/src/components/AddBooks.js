@@ -43,6 +43,13 @@ export function AddBooks(props) {
     const handleDashboard = () => {
         redirect.push("/dashboard");
     };
+    const closeButton = () => {
+        props.onHide(false);
+        setErrorBookName(false);
+        setErrorAuthorName(false);
+        setErrorQuantity(false);
+        setErrorPrice(false);
+    };
     const handleAuthorName = (e) => {
         let item = e.target.value;
         if (item.length < 3 || item.length > 25) {
@@ -121,7 +128,7 @@ export function AddBooks(props) {
         <Modal
             show={props.show} onHide={props.onHide}
             aria-labelledby="contained-modal-title-vcenter" centered>
-            <Modal.Header closeButton className="modalHead">
+            <Modal.Header className="modalHead">
                 <Modal.Title className="modalTitle">Add Books Details</Modal.Title>
             </Modal.Header>
             <Modal.Body><Form method='Post'>
@@ -155,7 +162,7 @@ export function AddBooks(props) {
             </Form><br />
                 <div className="modalButton">
                     <Button className='button' variant="primary" onClick={handleSubmit}>Submit</Button>
-                    <Button variant="secondary" onClick={props.onHide}>Close</Button>
+                    <Button variant="secondary" onClick={() => { closeButton() }}>Close</Button>
                 </div>
             </Modal.Body>
         </Modal>
