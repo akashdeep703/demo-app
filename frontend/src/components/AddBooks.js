@@ -10,11 +10,13 @@ export function AddBooks(props) {
     const [authorname, setAuthorName] = useState('');
     const [quantity, setQuanitity] = useState('');
     const [price, setPrice] = useState('');
+    const [file, setFile] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [errorbookname, setErrorBookName] = useState(false);
     const [errorauthorname, setErrorAuthorName] = useState(false);
     const [errorquantity, setErrorQuantity] = useState(false);
     const [errorprice, setErrorPrice] = useState(false);
+    const [errorfile, setErrorFile] = useState(false);
     const redirect = useHistory();
     useEffect(() => {
         if (props.singlebook.books && !bookname) {
@@ -78,6 +80,16 @@ export function AddBooks(props) {
             setErrorPrice(false);
         }
         setPrice(item);
+        setSubmitted(false);
+    };
+    const handleFile = (e) => {
+        let item = e.target.files[0];
+        if (item.size < 5242880 && (item.type === "image/jpeg" || item.type === "image/png" || item.type === "application/pdf")) {
+            setErrorFile(false);
+        } else {
+            setErrorFile(true);
+        }
+        setFile(item.name)
         setSubmitted(false);
     };
     // Handling the form submission
@@ -158,6 +170,13 @@ export function AddBooks(props) {
                     </div>
                     <Form.Control type="number" placeholder="Enter Book Price" value={price} onChange={handlePrice} />
                     {errorprice ? <Form.Text align="left" className="text-danger">Please enter valid price </Form.Text> : ""}
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <div align="left">
+                        <Form.Label>Attachment</Form.Label>
+                    </div>
+                    <Form.Control type="file" onChange={handleFile} />
+                    {errorfile ? <Form.Text align="left" className="text-danger">File Size or Format is Invalid</Form.Text> : ""}
                 </Form.Group>
             </Form><br />
                 <div className="modalButton">
