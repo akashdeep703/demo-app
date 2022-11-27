@@ -10,7 +10,7 @@ export function AddBooks(props) {
     const [authorname, setAuthorName] = useState('');
     const [quantity, setQuanitity] = useState('');
     const [price, setPrice] = useState('');
-    const [file, setFile] = useState('');
+    const [filename, setFileName] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [errorbookname, setErrorBookName] = useState(false);
     const [errorauthorname, setErrorAuthorName] = useState(false);
@@ -89,7 +89,7 @@ export function AddBooks(props) {
         } else {
             setErrorFile(true);
         }
-        setFile(item.name)
+        setFileName(item.name)
         setSubmitted(false);
     };
     // Handling the form submission
@@ -120,14 +120,14 @@ export function AddBooks(props) {
             setErrorPrice(false);
             if (props.singlebook.books) {
                 // Request body 
-                const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price };
+                const body = { bookname: bookname, authorname: authorname, quantity: quantity, price: price, filename };
                 // update items
                 await props.updatebook(id.books._id, body);
                 props.onHide(false);
                 props.getbooks(user_id);
             } else {
                 // Request body 
-                const body = { user_id: user_id, bookname: bookname, authorname: authorname, quantity: quantity, price: price };
+                const body = { user_id: user_id, bookname: bookname, authorname: authorname, quantity: quantity, price: price, filename };
                 // add items
                 props.addbook(body);
                 props.onHide(false);
@@ -175,7 +175,7 @@ export function AddBooks(props) {
                     <div align="left">
                         <Form.Label>Attachment</Form.Label>
                     </div>
-                    <Form.Control type="file" onChange={handleFile} />
+                    <Form.Control type="file" name="upload" onChange={handleFile} />
                     {errorfile ? <Form.Text align="left" className="text-danger">File Size or Format is Invalid</Form.Text> : ""}
                 </Form.Group>
             </Form><br />

@@ -1,15 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const fileupload = require("express-fileupload");
+console.log("🚀 ~ file: server.js ~ line 4 ~ fileupload", fileupload)
 // const bodyParser = require('body-parser');
 const config = require('config');
-const session = require('express-session');
 const app = express();
+app.use(fileupload());
 const user = require('./routes/api/users');
 const books = require('./routes/api/books');
 const auth = require('./routes/api/auth');
 //BodyParser Middleware
 // app.use(bodyParser.json()); 
-
+// console.log(fileupload);
+app.use(fileupload());
 app.use(express.json());
 
 // DB Config 

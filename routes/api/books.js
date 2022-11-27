@@ -1,7 +1,8 @@
 const express = require('express');
+const { dirname } = require('path');
+const appDir = dirname(require.main.filename);
 const router = express.Router();
 const auth = require('../../middleware/auth');
-
 // Books Model
 const Books = require('../../models/Books');
 
@@ -13,17 +14,31 @@ router.get('/:userid', (req, res) => {
 });
 // @routes POST api/books
 router.post('/', auth, (req, res) => {
-    const { user_id, bookname, authorname, quantity, price } = req.body;
+    console.log("🚀 ~ file: books.js ~ line 17 ~ router.post ~ req", req)
+    const { user_id, bookname, authorname, quantity, price, filename } = req.body;
     //validation
     if (!user_id || !bookname || !authorname || !quantity || !price) {
         return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+    if (!filename) {
+        filename = "";
+    } else {
+        const newpath = appDir + "/uploads/";
+        console.log("🚀 ~ file: books.js ~ line 32 ~ req.files ~ req.files", req.files)
+        req.files.mv(`${newpath}${filename}`, (err) => {
+            if (err) {
+                res.status(500).send({ message: "File upload failed", code: 200 });
+            }
+            res.status(200).send({ message: "File Uploaded", code: 200 });
+        });
     }
     const newBook = new Books({
         user_id,
         bookname,
         authorname,
         quantity,
-        price
+        price,
+        filename
     });
     newBook.save().then(books => res.json(books));
 });
